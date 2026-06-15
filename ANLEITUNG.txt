@@ -1,0 +1,112 @@
+PORTFOLIO – FLORIAN KIERSKI
+===========================
+
+INHALT DIESES ORDNERS
+- index.html      -> deine Portfolio-Seite (die eigentliche Website)
+- images/         -> alle Grafiken der Galerie
+- ANLEITUNG.txt   -> diese Datei
+
+SEITE ANSEHEN
+Doppelklick auf "index.html" – sie oeffnet sich im Browser.
+Wichtig: Der Ordner "images" muss immer NEBEN der index.html liegen,
+sonst fehlen die Galerie-Bilder.
+
+
+============================================================
+WIE DIE GALERIE AUFGEBAUT IST
+============================================================
+Die Galerie ist nach PROJEKTEN sortiert (RacingLeague, Cure, ...).
+- In der Karte erscheinen die ersten 3 Projekte als Vorschau-Kachel
+  plus eine "+X mehr"-Kachel.
+- Klick auf ein Projekt  -> zeigt NUR dessen Bilder (durchblaetterbar).
+- Klick auf "+X mehr" oder "Alle Projekte ansehen"
+  -> Uebersicht ALLER Projekte als Kacheln. Hat man zu viele Projekte
+     fuer den Bildschirm, kann man in der Uebersicht nach unten scrollen.
+- Hat ein Projekt nur 1 Bild, werden die Blaetter-Pfeile automatisch
+  ausgeblendet.
+
+
+============================================================
+SO PFLEGST DU DIE GALERIE
+============================================================
+Oeffne "index.html" mit einem Texteditor (z. B. VS Code, Editor,
+Notepad++) und suche weiter unten den Abschnitt:
+
+   // ====== PROJEKT-GALERIE — hier Projekte & Bilder pflegen =====
+   const PROJECTS = [
+     { id:'racingleague', title:'RacingLeague', sub:'Logo, Social-Media- & Event-Design', images:[
+       { src:'images/racingleague-logo.png',          cap:'Logo & Branding' },
+       { src:'images/racingleague-gesamtwertung.gif', cap:'Gesamtwertung (animiert)' },
+       ...
+     ]},
+     ...
+   ];
+
+Jedes Projekt ist ein Block in geschweiften Klammern { ... } mit:
+   id     = interner Kurzname (klein, ohne Leerzeichen)   z. B. 'cure'
+   title  = angezeigter Projektname                       z. B. 'Cure'
+   sub    = kurze Beschreibung + erscheint in der Uebersicht
+   images = Liste der Bilder; jedes Bild ist  { src:'...', cap:'...' }
+            src = Pfad zur Datei im Ordner images/
+            cap = Bildunterschrift im Viewer
+
+Die Reihenfolge in der Liste = die Reihenfolge in der Galerie.
+Das erste Bild eines Projekts ist automatisch das Vorschaubild (Cover).
+
+
+------------------------------------------------------------
+A) EIN BILD ZU EINEM BESTEHENDEN PROJEKT HINZUFUEGEN
+------------------------------------------------------------
+1) Bilddatei in den Ordner "images/" legen
+   (sauberer Export, kein Screenshot; ca. 1600 px breit reicht).
+2) Beim passenden Projekt in der "images"-Liste eine Zeile ergaenzen:
+       { src:'images/mein-neues-bild.jpg', cap:'Kurze Bildunterschrift' },
+   Komma am Zeilenende nicht vergessen.
+
+
+------------------------------------------------------------
+B) EIN KOMPLETT NEUES PROJEKT HINZUFUEGEN
+------------------------------------------------------------
+1) Alle Bilder des Projekts in den Ordner "images/" legen.
+2) Einen neuen Projekt-Block in die Liste einfuegen – am einfachsten
+   einen bestehenden Block kopieren und anpassen:
+
+     { id:'meinprojekt', title:'Mein Projekt', sub:'Kurze Beschreibung', images:[
+       { src:'images/bild-1.jpg', cap:'Erstes Bild' },
+       { src:'images/bild-2.jpg', cap:'Zweites Bild' },
+     ]},
+
+   Achte darauf, dass nach jedem Block ein Komma steht.
+   Fertig – Vorschau, Uebersicht und Viewer entstehen automatisch.
+
+Hinweis Reihenfolge: Die ersten 3 Projekte der Liste werden in der Karte
+als Kachel gezeigt. Wenn ein neues Projekt vorne auftauchen soll, schiebe
+seinen Block einfach weiter nach oben.
+
+
+------------------------------------------------------------
+WELCHES BILDFORMAT?
+------------------------------------------------------------
+- Fotos / farbige Grafiken / Flyer  -> .jpg  (klein und scharf)
+- Logos mit Transparenz             -> .png
+- Animationen                       -> .gif  (spielt im Viewer ab)
+Sehr grosse Dateien vorher verkleinern (Breite ca. 1600 px), damit die
+Seite schnell laedt.
+
+
+------------------------------------------------------------
+SPAETER: EXTERNEN LINK AKTIVIEREN (z. B. Figma)
+------------------------------------------------------------
+Im Projekt "myODAV" ist eine Stelle als Kommentar vorbereitet. Sobald du
+eine vorzeigbare Version hast, kannst du dort deine URL eintragen.
+(Bis dahin steht "Details auf Anfrage" – voellig okay.)
+
+
+------------------------------------------------------------
+SEITE INS INTERNET STELLEN
+------------------------------------------------------------
+Wenn du die Seite im Anschreiben verlinken willst, muss sie online liegen.
+Zwei einfache Wege – sag Bescheid, dann gehen wir einen Schritt fuer
+Schritt durch:
+- Ueber deinen Anbieter von floriankierski.de (Webspace/FTP)
+- Kostenlos per Netlify: Ordner einfach auf netlify.com/drop ziehen
