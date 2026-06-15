@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Florian Kierski — Mediendesign trifft Systemintegration</title>
+<meta name="description" content="Portfolio von Florian Kierski — Mediendesigner & UX/UI Designer auf dem Weg zum Fachinformatiker für Systemintegration. Sucht einen Ausbildungsplatz in der Region Eberswalde.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141414;
+    --surface:#1b1b1b;
+    --surface-2:#202020;
+    --line:rgba(255,255,255,0.08);
+    --line-strong:rgba(255,255,255,0.14);
+    --text:#ededed;
+    --muted:#9a9a9a;
+    --muted-dim:#6f6f6f;
+    --accent:#4fd1b0;
+    --accent-blue:#5fc8d6;
+    --accent-dim:rgba(79,209,176,0.12);
+    --maxw:1080px;
+    --display:"Bricolage Grotesque",sans-serif;
+    --body:"Inter",sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:88px}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(20,20,20,0.72);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease, background .3s ease;
+  }
+  .nav.scrolled{border-bottom-color:var(--line);background:rgba(20,20,20,0.85)}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:18px 28px;display:flex;align-items:center;justify-content:space-between}
+  .brand{font-family:var(--mono);font-size:13px;color:var(--muted);letter-spacing:.02em}
+  .brand b{color:var(--text);font-weight:500}
+  .brand .dot{color:var(--accent)}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{font-family:var(--mono);font-size:13px;color:var(--muted);transition:color .2s ease;position:relative}
+  .nav-links a:hover{color:var(--text)}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--accent);transition:width .25s ease}
+  .nav-links a:hover::after{width:100%}
+  .menu-btn{display:none;background:none;border:1px solid var(--line-strong);border-radius:8px;width:42px;height:42px;cursor:pointer;flex-direction:column;gap:5px;align-items:center;justify-content:center}
+  .menu-btn span{display:block;width:18px;height:1.5px;background:var(--text);transition:.25s}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;padding:170px 0 110px;overflow:hidden}
+  .hero .wrap{position:relative}
+
+  /* ============================================================
+     HERO-GLOW — EINSTELLUNGEN ZUM AUSPROBIEREN
+     (einfach die Werte aendern und Seite neu laden)
+     ============================================================ */
+  :root{
+    --glow-rgb: 79,209,176;   /* Farbe des Glows (R,G,B) */
+    --glow-size: 300px;       /* Groesse eines Tropfens */
+    --glow-blur: 22px;        /* Weichheit / Glow-Rand (groesser = weicher) */
+    --glow-opacity: .5;       /* Gesamt-Staerke (0–1; kleiner = schwaecher) */
+    --merge-speed: 16s;       /* Tempo Teilen/Verschmelzen/Anordnung (groesser = langsamer) */
+    --spin-speed: 44s;        /* Tempo Rotation (groesser = langsamer) */
+    --morph-speed: 11s;       /* Tempo Konturwandel: Kreis<->rundes Quadrat<->organisch */
+    --breathe-speed: 8s;      /* Tempo Atmen */
+    --parallax: 50;           /* Maus-Staerke in px (0 = aus): nah wegdruecken / sonst leicht folgen */
+    --parallax-ease: .06;     /* Weichheit (klein = sanfter/langsamer, groß = direkter) */
+    /* Verschmelzung: <svg id="goo">-Filter (stdDeviation = Reichweite, Matrix "A -B" = Schaerfe).
+       Anordnung/Wanderwege (Teilen, Dreieck, Verschmelzen): @keyframes blob1/2/3.
+       Konturformen: @keyframes morph1/2/3. */
+  }
+  .hero-glow{
+    position:absolute;top:-130px;right:-120px;width:580px;height:580px;
+    pointer-events:none;z-index:-1;opacity:var(--glow-opacity);
+    filter:blur(var(--glow-blur));
+    will-change:transform;
+  }
+  .hero-glow .goo-spin{position:absolute;inset:0;animation:gooSpin var(--spin-speed) linear infinite;will-change:transform}
+  .hero-glow .goo{
+    position:absolute;inset:0;filter:url(#goo);
+    animation:gooBreathe var(--breathe-speed) ease-in-out infinite;will-change:transform;
+  }
+  .hero-glow .blob{
+    position:absolute;top:50%;left:50%;width:var(--glow-size);height:var(--glow-size);
+    margin-left:calc(var(--glow-size) / -2);margin-top:calc(var(--glow-size) / -2);
+    border-radius:50%;will-change:transform,border-radius;
+    background:radial-gradient(circle, rgba(var(--glow-rgb),0.95) 0%, rgba(var(--glow-rgb),0.7) 50%, rgba(var(--glow-rgb),0) 71%);
+  }
+  .hero-glow .b1{animation:blob1 var(--merge-speed) ease-in-out infinite, morph1 var(--morph-speed) ease-in-out infinite}
+  .hero-glow .b2{animation:blob2 var(--merge-speed) ease-in-out infinite, morph2 calc(var(--morph-speed) * 1.3) ease-in-out infinite}
+  .hero-glow .b3{
+    width:calc(var(--glow-size) * 0.82);height:calc(var(--glow-size) * 0.82);
+    margin-left:calc(var(--glow-size) * -0.41);margin-top:calc(var(--glow-size) * -0.41);
+    animation:blob3 calc(var(--merge-speed) * 1.15) ease-in-out infinite, morph3 calc(var(--morph-speed) * 0.85) ease-in-out infinite;
+  }
+  @keyframes gooSpin{to{transform:rotate(360deg)}}
+  @keyframes gooBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  /* Anordnung: getrennt -> Dreieck -> verschmolzen (= Teilen/Verschmelzen) */
+  @keyframes blob1{0%,100%{transform:translate(-86px,-30px)}33%{transform:translate(0,-80px)}66%{transform:translate(-6px,-6px)}}
+  @keyframes blob2{0%,100%{transform:translate(90px,34px)}33%{transform:translate(-72px,54px)}66%{transform:translate(12px,8px)}}
+  @keyframes blob3{0%,100%{transform:translate(22px,74px)}33%{transform:translate(68px,50px)}66%{transform:translate(8px,-4px)}}
+  /* Konturwandel — alles weich gerundet, keine harten Kanten */
+  @keyframes morph1{0%,100%{border-radius:50%}33%{border-radius:38% 62% 44% 56% / 56% 42% 58% 44%}66%{border-radius:34%}}
+  @keyframes morph2{0%,100%{border-radius:36%}50%{border-radius:58% 42% 53% 47% / 47% 56% 44% 53%}}
+  @keyframes morph3{0%,100%{border-radius:50%}50%{border-radius:40% 60% 58% 42% / 60% 40% 60% 40%}}
+  @media (prefers-reduced-motion: reduce){ .hero-glow .goo-spin,.hero-glow .goo,.hero-glow .blob{animation:none} }
+  @media (max-width:760px){ .hero-glow{width:440px;height:440px;right:-110px;top:-80px;--glow-size:230px} }
+  .eyebrow{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.04em;margin-bottom:24px}
+  .hero h1{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(2.5rem,6.4vw,5rem);
+    line-height:1.02;
+    letter-spacing:-.02em;
+    max-width:14ch;
+  }
+  .hero h1 .accent{color:var(--accent)}
+  .transition{
+    font-family:var(--mono);font-size:clamp(.85rem,2.2vw,1.05rem);color:var(--muted);
+    margin:30px 0 26px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  }
+  .transition .arrow{color:var(--accent);letter-spacing:.1em}
+  .transition .to{color:var(--text)}
+  .hero p.lead{font-size:1.18rem;color:var(--muted);max-width:54ch;line-height:1.6}
+  .cta-row{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap}
+  .btn{
+    font-family:var(--mono);font-size:14px;padding:14px 26px;border-radius:10px;
+    transition:.22s ease;cursor:pointer;display:inline-flex;align-items:center;gap:9px;border:1px solid transparent;
+  }
+  .btn-primary{background:var(--accent);color:#0c1512;font-weight:500}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px rgba(79,209,176,0.5)}
+  .btn-ghost{border-color:var(--line-strong);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+  .statusbar{
+    margin-top:54px;border:1px solid var(--line);border-radius:12px;background:var(--surface);
+    font-family:var(--mono);font-size:12.5px;color:var(--muted);overflow:hidden;max-width:560px;
+  }
+  .statusbar .top{display:flex;gap:7px;padding:11px 15px;border-bottom:1px solid var(--line);align-items:center}
+  .statusbar .top i{width:10px;height:10px;border-radius:50%;background:#333;display:block}
+  .statusbar .top i:first-child{background:#3a3a3a}
+  .statusbar .top span{margin-left:8px;color:var(--muted-dim);font-size:11.5px}
+  .statusbar .body{padding:15px}
+  .statusbar .body .line{display:block;padding:3px 0}
+  .statusbar .body .k{color:var(--accent);display:inline-block;width:8ch}
+  .statusbar .body .v{color:var(--text)}
+
+  /* ---------- SECTIONS ---------- */
+  .block{padding:96px 0;border-top:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:48px;flex-wrap:wrap}
+  .sec-num{font-family:var(--mono);font-size:13px;color:var(--accent)}
+  .sec-head h2{font-family:var(--display);font-weight:600;font-size:clamp(1.8rem,3.6vw,2.6rem);letter-spacing:-.01em}
+
+  /* about */
+  .about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:54px}
+  .about-grid p{font-size:1.12rem;color:var(--text);line-height:1.7;margin-bottom:18px}
+  .about-grid p.muted{color:var(--muted);font-size:1rem}
+  .factcard{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:26px}
+  .factcard .row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .factcard .row:last-child{border-bottom:none}
+  .factcard .row .label{font-family:var(--mono);color:var(--muted-dim);font-size:12px}
+  .factcard .row .val{text-align:right;color:var(--text)}
+  .factcard .row .val a:hover{color:var(--accent)}
+
+  /* skills */
+  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+  .skill-col{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:26px;transition:.25s ease}
+  .skill-col:hover{border-color:var(--line-strong)}
+  .skill-col h3{font-family:var(--display);font-weight:600;font-size:1.15rem;margin-bottom:6px}
+  .skill-col .tag{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.04em;display:block;margin-bottom:20px}
+  .pills{display:flex;flex-wrap:wrap;gap:8px}
+  .pill{font-size:12.5px;padding:6px 11px;border:1px solid var(--line);border-radius:7px;color:var(--muted);transition:.2s}
+  .skill-col:hover .pill{color:var(--text);border-color:var(--line-strong)}
+  .subtag{font-family:var(--mono);font-size:10.5px;color:var(--muted-dim);letter-spacing:.05em;text-transform:uppercase;display:block;margin-bottom:11px}
+  .pill.dim{color:var(--muted-dim);border-style:dashed}
+  .skill-col:hover .pill.dim{color:var(--muted)}
+
+  /* projects */
+  .proj-cols{display:flex;gap:20px;align-items:flex-start}
+  .proj-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:20px}
+  .proj{
+    border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:30px;
+    display:flex;flex-direction:column;transition:.28s ease;position:relative;overflow:hidden;
+  }
+  .proj::after{content:"";position:absolute;inset:0;border-radius:16px;border:1px solid transparent;transition:.28s;pointer-events:none}
+  .proj:hover{transform:translateY(-4px);background:var(--surface-2)}
+  .proj:hover::after{border-color:rgba(79,209,176,0.4)}
+  .proj .meta{font-family:var(--mono);font-size:11.5px;color:var(--accent);letter-spacing:.04em;margin-bottom:16px;display:flex;justify-content:space-between}
+  .proj .meta .yr{color:var(--muted-dim)}
+  .proj h3{font-family:var(--display);font-weight:600;font-size:1.4rem;margin-bottom:12px;letter-spacing:-.01em}
+  .proj p{color:var(--muted);font-size:.98rem;line-height:1.6;margin-bottom:20px;flex-grow:1}
+  .proj .stack{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+  .proj .stack span{font-family:var(--mono);font-size:11px;color:var(--muted-dim);border:1px solid var(--line);padding:4px 9px;border-radius:6px}
+  .proj .link{font-family:var(--mono);font-size:13px;color:var(--accent);display:inline-flex;align-items:center;gap:7px;align-self:flex-start}
+  .proj .link .a{transition:transform .2s}
+  .proj:hover .link .a{transform:translate(3px,-3px)}
+  .proj .link.none{color:var(--muted-dim)}
+
+  /* timeline */
+  .timeline{position:relative;padding-left:26px}
+  .timeline::before{content:"";position:absolute;left:4px;top:6px;bottom:6px;width:1px;background:var(--line)}
+  .tl-item{position:relative;padding:0 0 34px 0}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item::before{content:"";position:absolute;left:-25px;top:7px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1.5px solid var(--muted-dim);transition:.25s}
+  .tl-item.now::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px rgba(79,209,176,0.15)}
+  .tl-item .date{font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:5px}
+  .tl-item h4{font-family:var(--display);font-weight:600;font-size:1.08rem;margin-bottom:4px}
+  .tl-item p{color:var(--muted);font-size:.95rem;line-height:1.55}
+
+  /* contact */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:42px;align-items:start}
+  .contact-intro p{color:var(--muted);font-size:1.08rem;line-height:1.65;margin-bottom:28px;max-width:42ch}
+  .contact-list{display:flex;flex-direction:column;gap:10px}
+  .contact-list .ci{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:11px;background:var(--surface);transition:.22s ease}
+  .contact-list a.ci:hover{border-color:var(--accent);transform:translateX(4px)}
+  .contact-list .ci .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-dim);display:block;margin-bottom:3px}
+  .contact-list .ci .d{font-size:1rem;color:var(--text);transition:.2s}
+  .contact-list a.ci:hover .d{color:var(--accent)}
+  .contact-list .ci.ci-row{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 16px}
+  .ci-row .ci-main{flex:1;min-width:0}
+  .ci-row:hover{border-color:var(--accent)}
+  .ci-row:hover .d{color:var(--accent)}
+  .copy-btn{flex-shrink:0;background:none;border:1px solid var(--line);border-radius:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:.2s ease}
+  .copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .copy-btn.copied{border-color:var(--accent);color:var(--accent)}
+  .copy-btn svg{width:16px;height:16px}
+  .contact-form{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:30px}
+  .contact-form .form-eyebrow{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.05em;display:block;margin-bottom:7px}
+  .contact-form h3{font-family:var(--display);font-weight:600;font-size:1.3rem;letter-spacing:-.01em;margin-bottom:22px}
+  .field{margin-bottom:16px}
+  .field label{font-family:var(--mono);font-size:11.5px;color:var(--muted);display:block;margin-bottom:8px}
+  .field input,.field textarea{
+    width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;
+    padding:13px 15px;color:var(--text);font-family:var(--body);font-size:15px;transition:.22s ease;
+  }
+  .field input::placeholder,.field textarea::placeholder{color:var(--muted-dim)}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);background:var(--surface-2);box-shadow:0 0 0 3px var(--accent-dim)}
+  .field textarea{resize:vertical;min-height:130px;line-height:1.55}
+  .contact-form .btn-primary{width:100%;justify-content:center;margin-top:4px}
+  .form-hint{font-family:var(--mono);font-size:11px;color:var(--muted-dim);margin-top:14px;text-align:center}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:38px 0;text-align:center}
+  footer .f{font-family:var(--mono);font-size:12px;color:var(--muted-dim)}
+
+
+  /* gallery */
+  .gthumbs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:2px 0 18px}
+  .gthumb{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:9px;border:1px solid var(--line);cursor:pointer;transition:.2s ease;background:#0d0d0d;display:block}
+  .gthumb:hover{border-color:var(--accent);transform:scale(1.015)}
+  .glink{cursor:pointer}
+  .gthumb.missing{object-fit:contain;padding:10px;border-style:dashed;font-family:var(--mono);font-size:10px;color:var(--muted-dim);background:#161616}
+  .gthumb-more{position:relative;background-size:cover;background-position:center;padding:0;overflow:hidden}
+  .gthumb-more span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,10,10,0.6);color:#fff;font-family:var(--mono);font-size:14px;letter-spacing:.03em;border-radius:8px;transition:.2s}
+  .gthumb-more:hover span{background:rgba(10,10,10,0.45);color:var(--accent)}
+  .lightbox{position:fixed;inset:0;z-index:200;background:rgba(8,8,8,0.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:40px}
+  .lightbox.open{display:flex}
+  .lightbox [hidden]{display:none!important}
+  .lb-close{position:absolute;top:20px;right:24px;font-size:22px;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1;transition:.2s;z-index:6}
+  .lb-close:hover{color:var(--accent)}
+  /* Übersicht (Ebene 1) */
+  .lb-overview{width:100%;max-width:1000px;max-height:86vh;overflow-y:auto;padding:8px 8px 18px;scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}
+  .lb-overview::-webkit-scrollbar{width:10px}
+  .lb-overview::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:8px}
+  .lb-overview::-webkit-scrollbar-track{background:transparent}
+  .lb-ov-title{font-family:var(--display);font-weight:600;font-size:1.5rem;color:var(--text);text-align:center;margin-bottom:5px}
+  .lb-ov-sub{font-family:var(--mono);font-size:12px;color:var(--muted-dim);text-align:center;margin-bottom:24px}
+  .lb-ov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .ov-card{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--surface);cursor:pointer;transition:.22s ease;padding:0;text-align:left}
+  .ov-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+  .ov-img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:#0d0d0d}
+  .ov-meta{padding:12px 14px}
+  .ov-name{font-family:var(--display);font-weight:600;font-size:1rem;color:var(--text)}
+  .ov-info{font-family:var(--mono);font-size:11px;color:var(--muted-dim);margin-top:3px}
+  /* Viewer (Ebene 2) */
+  .lb-viewer{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+  .lb-img{max-width:88vw;max-height:78vh;border-radius:10px;border:1px solid var(--line-strong);box-shadow:0 24px 70px rgba(0,0,0,.6)}
+  .lb-cap{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:13px;color:var(--text);padding:0 20px}
+  .lb-counter{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted-dim)}
+  .lb-back{position:absolute;top:20px;left:24px;font-family:var(--mono);font-size:13px;color:var(--muted);background:none;border:1px solid var(--line-strong);border-radius:8px;padding:7px 13px;cursor:pointer;transition:.2s;z-index:6}
+  .lb-back:hover{color:var(--accent);border-color:var(--accent)}
+  .lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.05);border:1px solid var(--line-strong);color:var(--text);width:46px;height:46px;border-radius:50%;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;transition:.2s}
+  .lb-prev{left:22px}.lb-next{right:22px}
+  .lb-nav:hover{color:var(--accent);border-color:var(--accent)}
+  @media (max-width:760px){.lb-ov-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.lb-nav{width:38px;height:38px;font-size:18px}.lb-prev{left:8px}.lb-next{right:8px}.lightbox{padding:16px}}
+  @media (max-width:480px){.lb-ov-grid{grid-template-columns:1fr}}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:860px){
+    .about-grid,.skills-grid,.contact-grid{grid-template-columns:1fr;gap:24px}
+    .proj-cols{flex-direction:column;gap:20px}
+    .menu-btn{display:flex}
+    .nav-links{
+      position:fixed;top:0;right:0;bottom:0;width:min(78vw,320px);
+      background:var(--surface);flex-direction:column;align-items:flex-start;
+      padding:96px 32px;gap:26px;transform:translateX(100%);transition:transform .3s ease;
+      border-left:1px solid var(--line);
+    }
+    .nav-links.open{transform:translateX(0)}
+    .nav-links a{font-size:16px}
+    .hero{padding:140px 0 80px}
+    .block{padding:72px 0}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand"><b>florian kierski</b> <span class="dot">●</span> fisi</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Menü öffnen"><span></span><span></span><span></span></button>
+    <div class="nav-links" id="navLinks">
+      <a href="#about">Über mich</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projekte</a>
+      <a href="#timeline">Werdegang</a>
+      <a href="#contact">Kontakt</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-glow" id="heroGlow" aria-hidden="true">
+      <div class="goo-spin">
+        <div class="goo">
+          <span class="blob b1"></span>
+          <span class="blob b2"></span>
+          <span class="blob b3"></span>
+        </div>
+      </div>
+    </div>
+    <svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs>
+      <filter id="goo">
+        <!-- stdDeviation = Reichweite: groesser -> Tropfen verschmelzen frueher -->
+        <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/>
+        <!-- letzte Zeile "18 -8" = Verschmelzungs-Schaerfe (groesser/negativer = definierter) -->
+        <feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"/>
+      </filter>
+    </defs></svg>
+    <div class="eyebrow reveal">// portfolio — florian kierski</div>
+    <h1 class="reveal">Vom Design zur <span class="accent">Systemintegration</span>.</h1>
+    <div class="transition reveal">
+      <span>mediendesign &amp; ux/ui</span>
+      <span class="arrow">──▶</span>
+      <span class="to">fachinformatik (fisi)</span>
+    </div>
+    <p class="lead reveal">Gelernter Mediendesigner mit Berufserfahrung in der Softwarekonzeption — und dem klaren Ziel, die technische IT-Seite auszubauen sucht einen Ausbildungsplatz als Fachinformatiker für Systemintegration!</p>
+    <div class="cta-row reveal">
+      <a href="#contact" class="btn btn-primary">Kontakt aufnehmen →</a>
+      <a href="#projects" class="btn btn-ghost">Projekte ansehen</a>
+    </div>
+
+    <div class="statusbar reveal">
+      <div class="top"><i></i><i></i><i></i><span>~/florian — status</span></div>
+      <div class="body">
+        <span class="line"><span class="k">ziel</span><span class="v">Ausbildung Fachinformatiker für Systemintegration</span></span>
+        <span class="line"><span class="k">region</span><span class="v">Eberswalde (Brandenburg)</span></span>
+        <span class="line"><span class="k">server</span><span class="v">eigener Linux-VPS aktiv seit 09/2024</span></span>
+        <span class="line"><span class="k">status</span><span class="v">verfügbar · sucht Ausbildungsplatz</span></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ABOUT -->
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">01</span><h2>Über mich</h2></div>
+      <div class="about-grid">
+        <div class="reveal">
+          <p>Leidenschaftlicher Grafik- und UX/UI-Designer mit einem Auge für Details, klare Strukturen und nutzerzentriertes Denken. Über mehrere Jahre habe ich bei der ODAV AG und freiberuflich daran gearbeitet, wie Menschen mit Software arbeiten — von der Konzeption bis zur Abstimmung mit der Entwicklung.</p>
+          <p>Ende 2025 habe ich die Entscheidung getroffen, diesen Weg konsequent weiterzudenken: Ich möchte Gestaltung und Technik verbinden und die IT-Seite zu meinem Beruf machen. Seit September 2024 betreibe und administriere ich dafür eine eigene Linux-/Server-Umgebung — komplett im Selbststudium aufgebaut.</p>
+          <p class="muted">Was mich von vielen Einsteigern unterscheidet: Ich bringe echte Projekterfahrung, agile Arbeitsweisen und ein tiefes Verständnis dafür mit, wofür Technik am Ende da ist — für die Menschen, die sie nutzen.</p>
+        </div>
+        <div class="factcard reveal">
+          <div class="row"><span class="label">geboren</span><span class="val">09.08.1996</span></div>
+          <div class="row"><span class="label">standort</span><span class="val">Eberswalde</span></div>
+          <div class="row"><span class="label">aktuell</span><span class="val">Mediendesigner &amp; UX/UI</span></div>
+          <div class="row"><span class="label">ziel</span><span class="val">Ausbildung FISI</span></div>
+          <div class="row"><span class="label">sprachen</span><span class="val">Deutsch · Englisch</span></div>
+          <div class="row"><span class="label">profil</span><span class="val"><a href="https://hype4.academy/profile/fkierski" target="_blank" rel="noopener">hype4 ↗</a></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="block" id="skills">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">02</span><h2>Skills</h2></div>
+      <div class="skills-grid">
+        <div class="skill-col reveal">
+          <span class="tag">// it &amp; technik</span>
+          <h3>IT &amp; Technik</h3>
+          <span class="subtag">kann ich anwenden &amp; erklären</span>
+          <div class="pills">
+	    <span class="pill">KI-/LLM-Tools</span>
+            <span class="pill">Linux-VPS aufsetzen (nach Doku)</span>
+            <span class="pill">Pterodactyl verwalten</span>
+            <span class="pill">Gameserver per Egg</span>
+            <span class="pill">Domain &amp; DNS (A-Record)</span>
+            <span class="pill">Fehler über Logs eingrenzen</span>
+            <span class="pill">Jira</span>
+            <span class="pill">Visual Studio</span>
+          </div>
+          <span class="subtag" style="margin-top:20px">Grundlagen · im Aufbau</span>
+          <div class="pills">
+            <span class="pill dim">Webserver (Nginx)</span>
+            <span class="pill dim">HTTPS / Certbot</span>
+            <span class="pill dim">Benutzer &amp; Rechte</span>
+            <span class="pill dim">Netzwerkgrundlagen</span>
+          </div>
+        </div>
+        <div class="skill-col reveal">
+          <span class="tag">// ux / ui design</span>
+          <h3>UX / UI Design</h3>
+          <div class="pills">
+            <span class="pill">Figma</span>
+            <span class="pill">Adobe XD</span>
+            <span class="pill">Prototyping</span>
+            <span class="pill">Wireframing</span>
+            <span class="pill">User Research</span>
+            <span class="pill">Design Systems</span>
+            <span class="pill">Responsive Design</span>
+          </div>
+        </div>
+        <div class="skill-col reveal">
+          <span class="tag">// grafik &amp; design</span>
+          <h3>Grafik &amp; Design</h3>
+          <div class="pills">
+            <span class="pill">Photoshop</span>
+            <span class="pill">Illustrator</span>
+            <span class="pill">InDesign</span>
+            <span class="pill">After Effects</span>
+            <span class="pill">Premiere Pro</span>
+            <span class="pill">Spline</span>
+            <span class="pill">Corporate Design</span>
+            <span class="pill">Typografie</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">03</span><h2>Projekte</h2></div>
+      <div class="proj-cols">
+        <div class="proj-col">
+          <article class="proj reveal">
+                    <div class="meta"><span>selbststudium</span><span class="yr">seit 09/2024</span></div>
+                    <h3>Linux-Serverprojekt</h3>
+                    <p>Aus eigenem Antrieb einen Linux-VPS bei Hetzner aufgesetzt — anhand der englischsprachigen Pterodactyl-Dokumentation, Schritt für Schritt. So einen öffentlich erreichbaren Server mit eigener Domain und HTTPS-Verschlüsselung zum Laufen gebracht und verstanden, wie die Bausteine zusammenspielen: Webserver, Zertifikate (Certbot / Let's Encrypt) und DNS. Inzwischen verwalte ich das Panel selbst und richte Gameserver per Egg ein. Mein Highlight: Als die Seite plötzlich offline war, habe ich die Ursache — ein abgelaufenes Zertifikat — selbst eingegrenzt und das Problem anhand der Server-Logs gemeinsam mit der Community gelöst.</p>
+                    <div class="stack"><span>Linux</span><span>Pterodactyl</span><span>HTTPS</span><span>DNS</span><span>Hetzner-VPS</span></div>
+                    <span class="link none">privates Projekt — Details auf Anfrage</span>
+                  </article>
+
+          <article class="proj reveal">
+                    <div class="meta"><span>odav ag</span><span class="yr">2021–2023</span></div>
+                    <h3>myODAV</h3>
+                    <p>Softwarekonzeption und Analyse des Nutzerverhaltens für ein Verwaltungssystem. Enge, agile Zusammenarbeit mit der Entwicklung unter Einsatz von Jira und Visual Studio — hier habe ich gelernt, wie technische Anforderungen, Konzeption und Umsetzung zusammenspielen.</p>
+                    <div class="stack"><span>UX-Konzeption</span><span>User Research</span><span>Jira</span><span>Agile</span></div>
+                    <!-- Optionaler externer Link: bei Bedarf <a class="link" href="DEINE-URL" target="_blank" rel="noopener">Arbeitsproben ansehen <span class="a">↗</span></a> -->
+                    <span class="link none">Unternehmensprojekt — Details auf Anfrage</span>
+                  </article>
+        </div>
+        <div class="proj-col">
+          <article class="proj reveal">
+                    <div class="meta"><span>hype 4 academy</span><span class="yr">03–08/2024</span></div>
+                    <h3>Daily UI/UX Challenge</h3>
+                    <p>90 Tage lückenlos täglich ein UX/UI-Design in unter 24 Stunden — mit drei Streak-Badges (30 / 60 / 90 Tage). Dokumentiert in einer eigenen Figma-Präsentation mit interaktiven Kacheln, je Wireframe und Mockup. Ein Beleg für Durchhaltevermögen, Tempo und methodische Disziplin.</p>
+                    <div class="stack"><span>Figma</span><span>UX/UI</span><span>Prototyping</span></div>
+                    <a class="link" href="https://hype4.academy/profile/fkierski" target="_blank" rel="noopener">Profil ansehen <span class="a">↗</span></a>
+                  </article>
+
+          <article class="proj reveal">
+                    <div class="meta"><span>community</span><span class="yr">laufend</span></div>
+                    <h3>Community-Projekte</h3>
+                    <p>In einer aktiven Online-Community gestalte ich aus eigenem Antrieb Design-Projekte für fiktive Marken und Auftraggeber – vom Logo über Branding und Social-Media-Grafiken bis hin zu Speisekarten und App-Konzepten. Jedes Projekt entsteht nach eigenem Briefing und ist eine freie Spielwiese, auf der ich Layout, Typografie und Corporate-Design-Denken praxisnah anwende und weiter ausbaue.</p>
+                    <div class="stack"><span>Grafikdesign</span><span>Typografie</span><span>Corporate Design</span></div>
+                    <div class="gthumbs" id="gthumbs"></div>
+                    <a class="link glink" id="openGallery">Alle Projekte ansehen <span class="a">↗</span></a>
+                  </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="block" id="timeline">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">04</span><h2>Werdegang</h2></div>
+      <div class="timeline">
+        <div class="tl-item now reveal">
+          <div class="date">09/2024 — heute</div>
+          <h4>Weiterentwicklung im Selbststudium</h4>
+          <p>Linux-/Server-Selbststudium und Aufbau einer eigenen administrierten Server-Umgebung.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="date">03/2024 — 08/2024</div>
+          <h4>Hype 4 Academy — Weiterbildung Senior UX/UI Design</h4>
+          <p>Intensivkurs zur Vertiefung methodischer Konzeption und effizienter Design-Workflows. Daily UI/UX Challenge über 90 Tage.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="date">02/2023 — 03/2024</div>
+          <h4>Freiberuflicher Mediendesigner</h4>
+          <p>Eigenständige Projektplanung und Umsetzung digitaler Lösungen für Online-Kunden.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="date">01/2021 — 02/2023</div>
+          <h4>ODAV AG — UX/UI Designer</h4>
+          <p>Softwarekonzeption und Analyse des Nutzerverhaltens für „myODAV". Enge Abstimmung mit der Entwicklung über Jira und Visual Studio.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="date">04/2019 — 12/2020</div>
+          <h4>ODAV AG — Ausbildung Mediendesigner</h4>
+          <p>Grafische Ausarbeitungen, Corporate Design und Konzeption von Print-Produkten. Berufsschule II Regensburg.</p>
+        </div>
+        <div class="tl-item reveal">
+          <div class="date">09/2016 — 07/2018</div>
+          <h4>BSA Angermünde</h4>
+          <p>Fachhochschulreife und Ausbildung zum gestaltungstechnischen Assistenten.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="block" id="contact">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">05</span><h2>Kontakt</h2></div>
+      <div class="contact-grid">
+        <div class="contact-intro reveal">
+          <p>Sie suchen einen motivierten Auszubildenden, der mehr mitbringt als das Übliche? Dann freue ich mich auf Ihre Nachricht — gern auch direkt per E-Mail oder Telefon.</p>
+          <div class="contact-list">
+            <div class="ci ci-row">
+              <a class="ci-main" href="mailto:kontakt@floriankierski.de"><span class="l">e-mail</span><span class="d">kontakt@floriankierski.de</span></a>
+              <button class="copy-btn" id="copyEmail" type="button" aria-label="E-Mail-Adresse kopieren" data-copy="kontakt@floriankierski.de"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+            </div>
+            <span class="ci"><span class="l">standort</span><span class="d">Eberswalde, Brandenburg</span></span>
+            <a class="ci" href="https://hype4.academy/profile/fkierski" target="_blank" rel="noopener"><span class="l">ux/ui-profil</span><span class="d">hype4.academy/profile/fkierski ↗</span></a>
+          </div>
+        </div>
+        <div class="contact-form reveal">
+          <span class="form-eyebrow">// nachricht senden</span>
+          <h3>Schreiben Sie mir</h3>
+          <div class="field">
+            <label for="name">Ihr Name / Unternehmen</label>
+            <input type="text" id="name" placeholder="Max Mustermann, Musterfirma GmbH">
+          </div>
+          <div class="field">
+            <label for="subj">Betreff</label>
+            <input type="text" id="subj" placeholder="Ausbildungsplatz Fachinformatiker (FISI)">
+          </div>
+          <div class="field">
+            <label for="msg">Nachricht</label>
+            <textarea id="msg" placeholder="Ihre Nachricht …"></textarea>
+          </div>
+          <button class="btn btn-primary" id="sendBtn" type="button">Nachricht verfassen →</button>
+          <p class="form-hint">Öffnet Ihr E-Mail-Programm mit der fertigen Nachricht.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Projekt-Galerie">
+  <button class="lb-close" id="lbClose" aria-label="Schließen">&#10005;</button>
+
+  <div class="lb-overview" id="lbOverview" hidden>
+    <h3 class="lb-ov-title">Projekte</h3>
+    <p class="lb-ov-sub">Projekt auswählen, um die Arbeiten zu sehen</p>
+    <div class="lb-ov-grid" id="lbOvGrid"></div>
+  </div>
+
+  <div class="lb-viewer" id="lbViewer" hidden>
+    <button class="lb-back" id="lbBack">&#8249;&nbsp; Übersicht</button>
+    <button class="lb-nav lb-prev" id="lbPrev" aria-label="Vorheriges Bild">&#8249;</button>
+    <img class="lb-img" id="lbImg" alt="">
+    <button class="lb-nav lb-next" id="lbNext" aria-label="Nächstes Bild">&#8250;</button>
+    <div class="lb-cap" id="lbCap"></div>
+    <div class="lb-counter" id="lbCounter"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p class="f">© 2026 Florian Kierski · Eberswalde · <span style="color:var(--accent)">verfügbar für eine Ausbildung als FISI</span></p>
+    <p class="f" style="margin-top:8px;opacity:.8">Konzept &amp; Design von Florian Kierski · technische Umsetzung mit KI-Unterstützung</p>
+  </div>
+</footer>
+
+<script>
+  // nav scroll state
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>20));
+
+  // mobile menu
+  const btn=document.getElementById('menuBtn'),links=document.getElementById('navLinks');
+  btn.addEventListener('click',()=>links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>links.classList.remove('open')));
+
+  // reveal on scroll
+  const io=new IntersectionObserver((es)=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{
+    el.style.transitionDelay=(Math.min(i,6)*0.05)+'s';
+    io.observe(el);
+  });
+
+  // contact form -> mailto
+  document.getElementById('sendBtn').addEventListener('click',()=>{
+    const name=document.getElementById('name').value.trim();
+    const subj=document.getElementById('subj').value.trim()||'Anfrage über Ihr Portfolio';
+    const msg=document.getElementById('msg').value.trim();
+    const body=(name?('Von: '+name+'\n\n'):'')+msg;
+    location.href='mailto:kontakt@floriankierski.de?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+  });
+
+  // E-Mail kopieren
+  const copyBtn=document.getElementById('copyEmail');
+  if(copyBtn){
+    const copyIcon=copyBtn.innerHTML;
+    const checkIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    copyBtn.addEventListener('click',async(e)=>{
+      e.preventDefault();e.stopPropagation();
+      const txt=copyBtn.dataset.copy;
+      try{
+        if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(txt);}
+        else{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();document.execCommand('copy');ta.remove();}
+        copyBtn.classList.add('copied');copyBtn.innerHTML=checkIcon;copyBtn.setAttribute('aria-label','E-Mail-Adresse kopiert');
+        setTimeout(()=>{copyBtn.classList.remove('copied');copyBtn.innerHTML=copyIcon;copyBtn.setAttribute('aria-label','E-Mail-Adresse kopieren');},1600);
+      }catch(err){}
+    });
+  }
+
+  // ====== PROJEKT-GALERIE — hier Projekte & Bilder pflegen ==============
+  // Neues Bild zu einem Projekt: Datei in den Ordner "images/" legen und unten
+  // beim passenden Projekt eine Zeile in "images" ergaenzen.
+  // Neues Projekt: einen Block { id, title, sub, images:[...] } hinzufuegen.
+  // Die ersten 3 Projekte erscheinen als Kacheln in der Karte, der Rest unter "mehr".
+  const PROJECTS = [
+    { id:'racingleague', title:'RacingLeague', sub:'Logo, Social-Media- & Event-Design', images:[
+      { src:'images/racingleague-logo.png',          cap:'Logo & Branding' },
+      { src:'images/racingleague-gesamtwertung.gif', cap:'Gesamtwertung (animiert)' },
+      { src:'images/racingleague-teamranking.jpg',   cap:'Team-Ranking' },
+      { src:'images/racingleague-event.jpg',         cap:'Event-Flyer' },
+    ]},
+    { id:'getraenke', title:'Getränkekarte', sub:'Menü-Design „Die Sorten“', images:[
+      { src:'images/getraenkekarte.jpg', cap:'Die Sorten' },
+    ]},
+    { id:'cure', title:'Cure', sub:'Logo & Stream-Branding (Twitch)', images:[
+      { src:'images/cure-logo.png',   cap:'Logo & Branding' },
+      { src:'images/cure-banner.jpg', cap:'Stream-Banner' },
+    ]},
+    { id:'lindenplatz', title:'Lindenplatz', sub:'App-Konzept (UX/UI)', images:[
+      { src:'images/lindenplatz-app.jpg', cap:'App-Konzept (UX/UI)' },
+    ]},
+    { id:'helpinghands', title:'Helping Hands', sub:'Spenden-Kampagne (Banner)', images:[
+      { src:'images/helping-hands-banner.jpg', cap:'Spenden-Banner' },
+    ]},
+  ];
+  // ======================================================================
+
+  const lb=document.getElementById('lightbox');
+  const lbOverview=document.getElementById('lbOverview'), lbViewer=document.getElementById('lbViewer');
+  const lbOvGrid=document.getElementById('lbOvGrid');
+  const lbImg=document.getElementById('lbImg'), lbCap=document.getElementById('lbCap'), lbCounter=document.getElementById('lbCounter');
+  const lbPrev=document.getElementById('lbPrev'), lbNext=document.getElementById('lbNext');
+  const gthumbs=document.getElementById('gthumbs');
+  const LEAD=3;
+  let curP=0, curI=0;
+
+  // Karten-Kacheln: erste LEAD Projekte + "mehr"
+  PROJECTS.slice(0,LEAD).forEach((proj,pi)=>{
+    const im=document.createElement('img');
+    im.className='gthumb'; im.src=proj.images[0].src; im.alt=proj.title; im.title=proj.title; im.loading='lazy';
+    im.addEventListener('click',()=>openProject(pi));
+    im.addEventListener('error',()=>{im.classList.add('missing');im.alt=proj.title+' (Bild fehlt)';});
+    gthumbs.appendChild(im);
+  });
+  if(PROJECTS.length>LEAD){
+    const btn=document.createElement('button');
+    btn.type='button'; btn.className='gthumb gthumb-more';
+    btn.style.backgroundImage='url("'+PROJECTS[LEAD].images[0].src+'")';
+    btn.setAttribute('aria-label','Alle Projekte ansehen');
+    const sp=document.createElement('span'); sp.textContent='+'+(PROJECTS.length-LEAD)+' mehr';
+    btn.appendChild(sp);
+    btn.addEventListener('click',openOverview);
+    gthumbs.appendChild(btn);
+  }
+
+  // Ebene 1: Projektübersicht
+  function buildOverview(){
+    lbOvGrid.innerHTML='';
+    PROJECTS.forEach((proj,pi)=>{
+      const n=proj.images.length;
+      const card=document.createElement('button');
+      card.type='button'; card.className='ov-card';
+      card.innerHTML='<img class="ov-img" src="'+proj.images[0].src+'" alt="'+proj.title+'" loading="lazy">'
+        +'<div class="ov-meta"><div class="ov-name">'+proj.title+'</div>'
+        +'<div class="ov-info">'+proj.sub+' · '+n+(n===1?' Bild':' Bilder')+'</div></div>';
+      card.addEventListener('click',()=>openProject(pi));
+      lbOvGrid.appendChild(card);
+    });
+  }
+  function openOverview(){
+    buildOverview();
+    lbViewer.hidden=true; lbOverview.hidden=false;
+    lb.classList.add('open'); document.body.style.overflow='hidden';
+  }
+
+  // Ebene 2: Projekt-Viewer
+  function openProject(pi){
+    curP=pi; curI=0;
+    lbOverview.hidden=true; lbViewer.hidden=false;
+    lb.classList.add('open'); document.body.style.overflow='hidden';
+    renderImage();
+  }
+  function renderImage(){
+    const proj=PROJECTS[curP], n=proj.images.length;
+    curI=(curI+n)%n;
+    const img=proj.images[curI];
+    lbImg.src=img.src; lbImg.alt=proj.title+' — '+img.cap;
+    lbCap.textContent=proj.title+' — '+img.cap;
+    const multi=n>1;
+    lbPrev.hidden=!multi; lbNext.hidden=!multi;
+    lbCounter.textContent=multi?(curI+1)+' / '+n:'';
+  }
+  function closeLb(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+
+  document.getElementById('lbClose').addEventListener('click',closeLb);
+  document.getElementById('lbBack').addEventListener('click',openOverview);
+  lbPrev.addEventListener('click',()=>{curI--;renderImage();});
+  lbNext.addEventListener('click',()=>{curI++;renderImage();});
+  const og=document.getElementById('openGallery'); if(og) og.addEventListener('click',openOverview);
+  lb.addEventListener('click',e=>{if(e.target===lb)closeLb();});
+  addEventListener('keydown',e=>{
+    if(!lb.classList.contains('open'))return;
+    if(e.key==='Escape'){ if(!lbViewer.hidden){openOverview();} else {closeLb();} return; }
+    if(!lbViewer.hidden){
+      if(e.key==='ArrowLeft'){curI--;renderImage();}
+      if(e.key==='ArrowRight'){curI++;renderImage();}
+    }
+  });
+  // Mausrad im Viewer: runter = vorwaerts, hoch = zurueck (mit Sperre gegen Mehrfach-Sprung)
+  let lastWheel=0;
+  lb.addEventListener('wheel',e=>{
+    if(!lb.classList.contains('open')||lbViewer.hidden) return;   // nur im Projekt-Viewer
+    const proj=PROJECTS[curP];
+    if(!proj||proj.images.length<2) return;                       // nur bei mehreren Bildern
+    if(Math.abs(e.deltaY)<8) return;
+    e.preventDefault();
+    const now=Date.now();
+    if(now-lastWheel<350) return;                                 // eine Wischbewegung = ein Bild
+    lastWheel=now;
+    if(e.deltaY>0){curI++;}else{curI--;}
+    renderImage();
+  },{passive:false});
+
+  // Hero-Glow: nah wegdruecken, sonst leicht folgen — auf ganzer Seite, sanft durch den Mittelpunkt
+  (function(){
+    const hero=document.querySelector('.hero'), glow=document.getElementById('heroGlow');
+    if(!hero||!glow) return;
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const PX=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--parallax'))||0;
+    if(!PX) return;
+    const EASE=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--parallax-ease'))||0.06;
+    const FOLLOW=PX*0.32, PUSH=PX*0.9, R=320, MAX=PX*1.25;   // R = Wirkradius des Wegdrueckens (px)
+    const G=PUSH*4/R;                                        // Verstaerkung: Kraft ~ Abstand (durch Zentrum = 0 = kein Umspringen)
+    let tx=0,ty=0,cx=0,cy=0,raf=null;
+    const clamp=(v,m)=>Math.max(-m,Math.min(m,v));
+    function loop(){
+      cx+=(tx-cx)*EASE; cy+=(ty-cy)*EASE;
+      glow.style.transform='translate('+cx.toFixed(2)+'px,'+cy.toFixed(2)+'px)';
+      if(Math.abs(tx-cx)>0.12||Math.abs(ty-cy)>0.12){ raf=requestAnimationFrame(loop); }
+      else { glow.style.transform='translate('+tx+'px,'+ty+'px)'; raf=null; }
+    }
+    function kick(){ if(!raf) raf=requestAnimationFrame(loop); }
+    window.addEventListener('mousemove',e=>{
+      const hr=hero.getBoundingClientRect();
+      let nx=clamp((e.clientX-hr.left)/hr.width-0.5,0.5), ny=clamp((e.clientY-hr.top)/hr.height-0.5,0.5);
+      let fx=nx*FOLLOW, fy=ny*FOLLOW;                        // leichtes Folgen
+      const gr=glow.getBoundingClientRect();                 // sanftes Wegdruecken
+      const rcx=gr.left+gr.width/2-cx, rcy=gr.top+gr.height/2-cy;
+      const dx=e.clientX-rcx, dy=e.clientY-rcy, dist=Math.hypot(dx,dy);
+      if(dist<R){ const f=1-dist/R; fx+=-dx*f*G; fy+=-dy*f*G; }  // ~Abstand -> im Zentrum 0, kein Snap
+      tx=clamp(fx,MAX); ty=clamp(fy,MAX);
+      kick();
+    });
+    document.addEventListener('mouseleave',()=>{ tx=0; ty=0; kick(); }); // nur wenn die Maus die Seite verlaesst
+  })();
+</script>
+</body>
+</html>
