@@ -22,7 +22,7 @@
     const subj=document.getElementById('subj').value.trim()||'Anfrage über Ihr Portfolio';
     const msg=document.getElementById('msg').value.trim();
     const body=(name?('Von: '+name+'\n\n'):'')+msg;
-    location.href='mailto:kontakt@floriankierski.de?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+    location.href='mailto:f.kierski@floriankierski.de?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
   });
 
   // E-Mail kopieren
